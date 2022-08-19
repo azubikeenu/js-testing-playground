@@ -1,0 +1,79 @@
+SPIES AND MOCKS
+This are tools provided by test-runners to handle side-effect , ie external dependencies within your testing environment
+
+SPIES
+Spies are wrappers around your functions or empty replacements around functions that allow you to track
+if and how your function was called
+Sometimes all you need is to validate whether or not a specific function has been called (and possibly which arguments were passed).
+In these cases a spy would be all we need which you can use directly with vi.spyOn()
+
+MOCKS
+This are replacements for an API that may provide some test-specific behavior instead
+
+
+SPIES
+
+
+vi.fn#
+Type: (fn: Function) => CallableMockInstance
+
+Creates a spy on a function, though can be initiated without one. Every time a function is invoked,
+it stores its call arguments, returns and instances. Also, you can manipulate its behavior with methods.
+If no function is given, mock will return undefined, when invoked.
+
+const getApples = vi.fn(() => 0)
+
+getApples()
+
+expect(getApples).toHaveBeenCalled()
+expect(getApples).toHaveReturnedWith(0)
+
+getApples.mockReturnValueOnce(5)
+
+const res = getApples()
+expect(res).toBe(5)
+expect(getApples).toHaveNthReturnedWith(2, 5)
+
+Sometimes all you need is to validate whether or not a specific function has been called (and possibly which arguments were passed).
+In these cases a spy would be all we need which you can use directly with vi.spyOn()
+
+vi.mock('fs') is hoisted
+
+
+import { it, expect, vi } from 'vitest';
+import { promises as fs } from 'fs';
+import path from 'path';
+import writeData from './io';
+
+vi.mock('fs');
+
+vi.mock('path', () => {
+  return {
+    default: {
+      join: (...args) => {
+        return args[args.length - 1];
+      },
+    },
+   };
+ });
+
+it('should execute the write file method', () => {
+  const testData = 'dummy data';
+  const fileName = 'data.txt';
+  writeData(testData, fileName);
+  expect(fs.writeFile).toHaveBeenCalled();
+  expect(fs.writeFile).toHaveBeenCalledWith(fileName, testData);
+});
+
+
+
+// Using spyOn
+it('should execute the write file method', () => {
+  const testData = 'dummy data';
+  const fileName = 'data.txt';
+  vi.spyOn(path , 'join').mockReturnValue(fileName)
+  const fsMock = vi.spyOn(fs, 'writeFile')
+  writeData(testData, fileName);
+  expect(fsMock).toHaveBeenCalled();
+  expect(fsMock).toHaveBeenCalledWith(fileName, testData);
+});
