@@ -7,9 +7,22 @@ if and how your function was called
 Sometimes all you need is to validate whether or not a specific function has been called (and possibly which arguments were passed).
 In these cases a spy would be all we need which you can use directly with vi.spyOn()
 
+A Test spy
+
+- Captures arguments
+
+- Tracks function invocation
+
+- Captures the return value
+
+- Captures the value of this
+
+- And captures any exception that is thrown
+
 MOCKS
 This are replacements for an API that may provide some test-specific behavior instead
-
+Ie mocks add some specific behaviour on functions
+Mocks helps us replace the functionalities defined in modules whether we own them or not
 
 SPIES
 
@@ -51,7 +64,7 @@ vi.mock('path', () => {
   return {
     default: {
       join: (...args) => {
-        return args[args.length - 1];
+        return args[args.length - 1]; // this returns the last element of the parameters supplied
       },
     },
    };
