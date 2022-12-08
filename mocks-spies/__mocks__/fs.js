@@ -6,3 +6,8 @@ export const promises = {
     });
   }),
 };
+
+// to mock out path.js ..create a path.js file and dump the ff code snippet
+// export default {
+//   join: vi.fn((...args) => args[args.length-1])
+// }
