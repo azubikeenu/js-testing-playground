@@ -3,15 +3,15 @@ import { add, addModified } from './math';
 
 describe('Add test without reduce Add()', () => {
   it('Should return the sum of an array', () => {
-    // Given
+    // Given   Arrange
     const array = [1, 2, 3];
-    // When
+    // When Act
     const result = add(array);
-    // Then
+    // Then Assert
     expect(result).toBe(6);
   });
 
-  it('Should return NaN if one of the elements of the array is invalid', () => {
+  it('Should return NaN if atleast one of the elements of the array is invalid', () => {
     const array = [1, 2, true];
     const result = add(array);
     expect(result).toBeNaN();
@@ -32,13 +32,13 @@ describe('Add test without reduce Add()', () => {
   it('Should throw and error when no parameters are passed to the function', () => {
     expect(() => {
       add();
-    }).toThrow();
+    }).toThrow(TypeError);
   });
 
   it('Should throw an error when numeric parameters are passed insted of an array', () => {
     expect(() => {
       add(1, 2, 3);
-    }).toThrow(/is not iterable/);
+    }).toThrow(TypeError);
   });
 });
 
@@ -50,6 +50,10 @@ describe('add test with reduce addModified', () => {
 
   it(`Should return NaN one of the parameters passed  are not of type string or numeric string  `, () => {
     const result = addModified('1', true, 3);
+    expect(result).toBeNaN();
+  });
+  it(`Should return NaN one of the parameters passed  are not of type string or numeric string  `, () => {
+    const result = addModified('1', undefined, 3);
     expect(result).toBeNaN();
   });
 
